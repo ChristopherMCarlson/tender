@@ -1,62 +1,58 @@
 <template>
   <v-app id="tenderDesktop">
+    <v-navigation-drawer>
+
+    </v-navigation-drawer>
     <v-main>
-      <v-container
-        class="py-8 px-6"
-        fluid
-      >
-        <v-row class="justify-space-around">
-            <v-col cols="4">
-
-            </v-col>
-            <v-col cols="6">
-                <v-card
-              height="75vh"
-              width="25vw"
-              id="recipe-card"
-              margin="auto"
-              @mousedown="startDrag"
-              @mousemove="onDrag"
-              @mouseup="endDrag"
-              @touchstart="startDrag"
-              @touchmove="onDrag"
-              @touchend="endDrag"
-              :style="{ left: cardLeft + 'px' }"
-              class="overflow-auto"
-            >
-              <transition name="flip" mode="out-in">
-                <div :key="showDirections" style="height: 100%;">
-                  <v-img v-if="!showDirections" :src="recipeImage" height="100%" cover>
-                    <v-row class="pa-5" style="position: absolute; bottom: 0; width: 100%;">
-                      <h1 class="recipe-name">{{ randomRecipe.name }}</h1>
-                    </v-row>
-                  </v-img>
-                  <div v-else>
-                    <h1>{{ randomRecipe.name }}</h1>
-                    <v-card-text>
-                      <v-row>
-                        <v-col cols="12" class="px-4">
-                          <h2>Ingredients</h2>
-                          <ul>
-                            <li v-for="ingredient in randomRecipe.ingredients" :key="ingredient">{{ ingredient }}</li>
-                          </ul>
-                        </v-col>
-                        <v-col cols="12" class="px-4">
-                          <h2>Directions</h2>
-                          <ul>
-                            <li v-for="direction in randomRecipe.directions" :key="direction">{{ direction }}</li>
-                          </ul>
-                        </v-col>
-                      </v-row>
-                    </v-card-text>
-                  </div>
-                </div>
-              </transition>
-            </v-card>
-            </v-col>
-            <v-col cols="2">
-
-            </v-col>
+      <v-container class="py-8 px-6" fluid>
+        <v-row class="justify-center">
+          <v-col cols="12">
+            <v-row>
+              <v-col cols="12" class="d-flex justify-center">
+                <v-card height="75vh" width="25vw" id="recipe-card" margin="auto" @mousedown="startDrag"
+                  @mousemove="onDrag" @mouseup="endDrag" @touchstart="startDrag" @touchmove="onDrag" @touchend="endDrag"
+                  :style="{ left: cardLeft + 'px' }" class="overflow-auto">
+                  <transition name="flip" mode="out-in">
+                    <div :key="showDirections" style="height: 100%;">
+                      <v-img v-if="!showDirections && recipeImage" :src="recipeImage" height="100%" cover>
+                        <v-row class="pa-5" style="position: absolute; bottom: 0; width: 100%;">
+                          <h1 class="recipe-name">{{ activeRecipe.name }}</h1>
+                        </v-row>
+                      </v-img>
+                      <div v-else>
+                        <h1>{{ activeRecipe.name }}</h1>
+                        <v-card-text>
+                          <v-row>
+                            <v-col cols="12" class="px-4">
+                              <h2>Ingredients</h2>
+                              <ul>
+                                <li v-for="ingredient in activeRecipe.ingredients" :key="ingredient">{{ ingredient }}
+                                </li>
+                              </ul>
+                            </v-col>
+                            <v-col cols="12" class="px-4">
+                              <h2>Directions</h2>
+                              <ul>
+                                <li v-for="direction in activeRecipe.directions" :key="direction">{{ direction }}</li>
+                              </ul>
+                            </v-col>
+                          </v-row>
+                        </v-card-text>
+                      </div>
+                    </div>
+                  </transition>
+                </v-card>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col cols="6" class="text-center">
+                <v-btn fab></v-btn>
+              </v-col>
+              <v-col cols="6" class="text-center">
+                <v-btn fab></v-btn>
+              </v-col>
+            </v-row>
+          </v-col>
         </v-row>
       </v-container>
     </v-main>
@@ -73,24 +69,26 @@ export default {
       cardLeft: 0,
       dragDirection: '',
       showDirections: false,
+      activeRecipe: null,
+      recipeImage: null,
     };
   },
   computed: {
-    randomRecipe(){
-        let recipes = require('@/assets/recipes.json');
-        console.log(recipes[0]);
-        return recipes[Math.floor(Math.random() * recipes.length)];
+    viewedRecipes() {
+      return this.$store.state.likedRecipes.concat(this.$store.state.dislikedRecipes);
     },
-    recipeImage(){
-        return require(`@/assets/recipeImages/${this.randomRecipe.imageId}.jpg`);
-    }
   },
-    mounted() {
-        window.addEventListener('keydown', this.handleKeyDown);
-    },
-    beforeUnmount() {
-        window.removeEventListener('keydown', this.handleKeyDown);
-    },
+  beforeMount() {
+    let avilableRecipes = require('@/assets/recipes.json').filter(recipe => !this.viewedRecipes.includes(recipe));
+    this.activeRecipe = avilableRecipes[Math.floor(Math.random() * avilableRecipes.length)];
+    this.recipeImage = require(`@/assets/recipeImages/${this.activeRecipe.imageId}.jpg`);
+  },
+  mounted() {
+    window.addEventListener('keydown', this.handleKeyDown);
+  },
+  beforeUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown);
+  },
   methods: {
     startDrag(event) {
       this.isDragging = true;
@@ -110,20 +108,27 @@ export default {
       }
     },
     endDrag() {
-        this.dragDirection = '';
-        this.cardLeft = 0;
+      this.dragDirection = '';
+      this.cardLeft = 0;
       this.isDragging = false;
     },
     handleKeyDown(event) {
       if (event.key === 'ArrowRight') {
-        console.log('ArrowRight key pressed');
+        this.$store.dispatch('addToLikedRecipes', this.activeRecipe);
+        this.getNewRecipe();
       }
       if (event.key === 'ArrowLeft') {
-        console.log('ArrowLeft key pressed');
+        this.$store.dispatch('addToDislikedRecipes', this.activeRecipe);
+        this.getNewRecipe();
       }
       if (event.key === 'ArrowUp') {
         this.showDirections = !this.showDirections;
       }
+    },
+    getNewRecipe() {
+      let avilableRecipes = require('@/assets/recipes.json').filter(recipe => !this.viewedRecipes.includes(recipe));
+      this.activeRecipe = avilableRecipes[Math.floor(Math.random() * avilableRecipes.length)];
+      this.recipeImage = require(`@/assets/recipeImages/${this.activeRecipe.imageId}.jpg`);
     },
   },
 };
@@ -134,17 +139,20 @@ export default {
   position: relative;
   cursor: grab;
 }
+
 .recipe-name {
-    color: white;
-    text-shadow: 1px 1px 2px black;
+  color: white;
+  text-shadow: 1px 1px 2px black;
 }
 
-.flip-enter-active, .flip-leave-active {
+.flip-enter-active,
+.flip-leave-active {
   transition: transform 0.6s;
   transform-style: preserve-3d;
 }
 
-.flip-enter, .flip-leave-to {
+.flip-enter,
+.flip-leave-to {
   transform: rotateY(180deg);
 }
 </style>

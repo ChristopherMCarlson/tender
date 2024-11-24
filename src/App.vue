@@ -1,8 +1,6 @@
 <template>
   <v-app>
-    <v-main>
       <DesktopView />
-    </v-main>
   </v-app>
 </template>
 
