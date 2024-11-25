@@ -44,7 +44,7 @@ export default createStore({
     async login({ commit }, user) {
       try {
         const response = await axios.post(
-          "http://localhost:5000/api/auth/login",
+          "https://cmcwebdevelopment.com/tender-api/api/auth/login",
           user
         );
         const token = response.data.token;
@@ -57,7 +57,10 @@ export default createStore({
       }
     },
     async register(user) {
-      await axios.post("http://localhost:5000/api/auth/register", user);
+      await axios.post(
+        "https://cmcwebdevelopment.com/tender-api/api/auth/register",
+        user
+      );
     },
     logout({ commit }) {
       commit("logout");
@@ -66,42 +69,45 @@ export default createStore({
     },
     async addToLikedRecipes({ commit }, recipe) {
       const response = await axios.post(
-        "http://localhost:5000/api/likedRecipes/add",
+        "https://cmcwebdevelopment.com/tender-api/api/likedRecipes/add",
         { recipeId: recipe.imageId }
       );
       commit("addToLikedRecipes", response.data.likedRecipes.recipes);
     },
     async getLikedRecipes({ commit }) {
       const response = await axios.get(
-        "http://localhost:5000/api/likedRecipes/"
+        "https://cmcwebdevelopment.com/tender-api/api/likedRecipes/"
       );
       commit("addToLikedRecipes", response.data.likedRecipes.recipes);
     },
     async addToDislikedRecipes({ commit }, recipe) {
       const response = await axios.post(
-        "http://localhost:5000/api/dislikedRecipes/add",
+        "https://cmcwebdevelopment.com/tender-api/api/dislikedRecipes/add",
         { recipeId: recipe.imageId }
       );
       commit("addToDislikedRecipes", response.data.dislikedRecipes.recipes);
     },
     async getDislikedRecipes({ commit }) {
       const response = await axios.get(
-        "http://localhost:5000/api/dislikedRecipes/"
+        "https://cmcwebdevelopment.com/tender-api/api/dislikedRecipes/"
       );
       commit("addToDislikedRecipes", response.data.dislikedRecipes.recipes);
     },
     async getFriendCode({ commit }) {
       const response = await axios.get(
-        "http://localhost:5000/api/friends/code"
+        "https://cmcwebdevelopment.com/tender-api/api/friends/code"
       );
       console.log(response.data);
       commit("setFriendCode", response.data.code);
     },
     async addFriend({ commit }, friendCode) {
       try {
-        const response = await axios.post("http://localhost:5000/api/add", {
-          code: friendCode,
-        });
+        const response = await axios.post(
+          "https://cmcwebdevelopment.com/tender-api/api/add",
+          {
+            code: friendCode,
+          }
+        );
         console.log(response.data.friendsList.friends);
         commit("setFriendsList", response.data.friendsList.friends);
       } catch (error) {
@@ -110,14 +116,16 @@ export default createStore({
     },
     async getFriendsList({ commit }) {
       const response = await axios.get(
-        "http://localhost:5000/api/friends/list"
+        "https://cmcwebdevelopment.com/tender-api/api/friends/list"
       );
       console.log(response.data.friendsList.friends);
       commit("setFriendsList", response.data.friendsList.friends);
     },
     async checkToken({ commit }) {
       try {
-        const response = await axios.get("http://localhost:5000/api/protected");
+        const response = await axios.get(
+          "https://cmcwebdevelopment.com/tender-api/api/protected"
+        );
         commit("auth_success", response.data.token);
       } catch (error) {
         commit("auth_error");

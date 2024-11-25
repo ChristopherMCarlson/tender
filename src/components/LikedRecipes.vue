@@ -11,9 +11,9 @@
                             <v-col cols="6">
                                 <v-btn text @click="viewRecipe(recipe)">View Recipe</v-btn>
                             </v-col>
-                            <v-col cols="6">
+                            <!-- <v-col cols="6">
                                 <v-btn text @click="removeRecipe(index)">Remove</v-btn>
-                            </v-col>
+                            </v-col> -->
                         </v-row>
                     </v-img>
                 </v-card>

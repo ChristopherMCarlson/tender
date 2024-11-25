@@ -51,11 +51,46 @@
                             <v-col cols="6">
                                 <v-row>
                                     <v-spacer></v-spacer>
-                                    <v-col cols="4" class="text-center">
+                                    <v-col cols="3" class="text-center">
                                         <v-btn icon="mdi-close" color="red" @click="addToDislikedRecipes()"></v-btn>
                                     </v-col>
-                                    <v-col cols="4" class="text-center">
+                                    <v-col cols="3" class="text-center">
+                                        <v-btn icon="mdi-arrow-up" color="blue"
+                                            @click="showDirections = !showDirections"></v-btn>
+                                    </v-col>
+                                    <v-col cols="3" class="text-center">
                                         <v-btn icon="mdi-check" color="green" @click="addToLikedRecipes()"></v-btn>
+                                    </v-col>
+                                    <v-spacer></v-spacer>
+                                </v-row>
+                            </v-col>
+                        </v-row>
+                        <v-row class="justify-center">
+                            <v-col cols="12" class="text-center">
+                                <span style="opacity: 75%;">Keyboard Shortcuts</span>
+                            </v-col>
+                        </v-row>
+                        <v-row class="justify-center">
+                            <v-col cols="6" class="text-center">
+                                <v-row>
+                                    <v-spacer></v-spacer>
+                                    <v-col cols="3" class="text-center">
+                                        <span style="opacity: 75%;">
+                                            <v-icon>mdi-arrow-left-box</v-icon>
+                                            Dislike
+                                        </span>
+                                    </v-col>
+                                    <v-col cols="3" class="text-center">
+                                        <span style="opacity: 75%;">
+                                            <v-icon>mdi-arrow-up-box</v-icon>
+                                            Flip Card
+                                        </span>
+                                    </v-col>
+                                    <v-col cols="3" class="text-center">
+                                        <span style="opacity: 75%;">
+                                            <v-icon>mdi-arrow-right-box</v-icon>
+                                            Like
+                                        </span>
                                     </v-col>
                                     <v-spacer></v-spacer>
                                 </v-row>
