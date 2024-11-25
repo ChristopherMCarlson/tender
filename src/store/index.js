@@ -26,9 +26,8 @@ export default createStore({
     addToLikedRecipes(state, recipes) {
       state.likedRecipes = recipes;
     },
-    addToDislikedRecipes(state, recipe) {
-      state.dislikedRecipes.push(recipe);
-      console.log(state.dislikedRecipes);
+    addToDislikedRecipes(state, recipes) {
+      state.dislikedRecipes = recipes;
     },
     setFriendCode(state, friendCode) {
       console.log(friendCode);
@@ -70,10 +69,26 @@ export default createStore({
         "http://localhost:5000/api/likedRecipes/add",
         { recipeId: recipe.imageId }
       );
-      commit("addToLikedRecipes", response.data.likedRecipes);
+      commit("addToLikedRecipes", response.data.likedRecipes.recipes);
     },
-    addToDislikedRecipes(context, recipe) {
-      context.commit("addToDislikedRecipes", recipe);
+    async getLikedRecipes({ commit }) {
+      const response = await axios.get(
+        "http://localhost:5000/api/likedRecipes/"
+      );
+      commit("addToLikedRecipes", response.data.likedRecipes.recipes);
+    },
+    async addToDislikedRecipes({ commit }, recipe) {
+      const response = await axios.post(
+        "http://localhost:5000/api/dislikedRecipes/add",
+        { recipeId: recipe.imageId }
+      );
+      commit("addToDislikedRecipes", response.data.dislikedRecipes.recipes);
+    },
+    async getDislikedRecipes({ commit }) {
+      const response = await axios.get(
+        "http://localhost:5000/api/dislikedRecipes/"
+      );
+      commit("addToDislikedRecipes", response.data.dislikedRecipes.recipes);
     },
     async getFriendCode({ commit }) {
       const response = await axios.get(

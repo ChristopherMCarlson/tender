@@ -84,13 +84,13 @@ export default {
     },
     computed: {
         viewedRecipes() {
-            console.log(this.$store.state.likedRecipes.concat(this.$store.state.dislikedRecipes).map(recipe => recipe.imageId));
             return this.$store.state.likedRecipes.concat(this.$store.state.dislikedRecipes);
         },
     },
     beforeMount() {
-        let viewedRecipeIds = this.viewedRecipes.map(recipe => recipe.imageId);
-        console.log(viewedRecipeIds);
+        this.$store.dispatch('getLikedRecipes');
+        this.$store.dispatch('getDislikedRecipes');
+        let viewedRecipeIds = this.viewedRecipes;
         let avilableRecipes = require('@/assets/recipes.json').filter(recipe => !viewedRecipeIds.includes(recipe.imageId));
         this.activeRecipe = avilableRecipes[Math.floor(Math.random() * avilableRecipes.length)];
         this.recipeImage = require(`@/assets/recipeImages/${this.activeRecipe.imageId}.jpg`);

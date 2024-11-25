@@ -76,17 +76,15 @@ export default {
         };
     },
     created() {
-        this.likedRecipes = this.$store.state.likedRecipes;
+        this.$store.dispatch('getLikedRecipes');
+        let likedRecipesObjects = require('@/assets/recipes.json').filter(recipe => this.$store.state.likedRecipes.includes(recipe.imageId));
+        this.likedRecipes = likedRecipesObjects;
     },
     methods: {
         viewRecipe(recipe) {
             this.activeRecipe = recipe;
             this.activeRecipeDialog = true;
         },
-        // removeRecipe(index) {
-        //     this.likedRecipes.splice(index, 1);
-        //     localStorage.setItem('likedRecipes', JSON.stringify(this.likedRecipes));
-        // },
     },
 }
 </script>
