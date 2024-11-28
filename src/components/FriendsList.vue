@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <v-container class="gradient-background">
         <v-row class="justify-center">
             <v-col cols="12" class="text-center">
                 <h1>
@@ -7,7 +7,7 @@
                 </h1>
             </v-col>
             <v-col cols="12" md="7">
-                <v-card>
+                <v-card color="primary">
                     <v-card-title>
                         Add a Friend
                     </v-card-title>
@@ -27,7 +27,7 @@
                         </h2>
                     </v-col>
                     <v-col v-for="friend in friendsList" :key="friend" cols="12">
-                        <v-card>
+                        <v-card color="primary">
                             <v-card-title>
                                 {{ friend }}
                             </v-card-title>

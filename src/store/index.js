@@ -56,11 +56,20 @@ export default createStore({
         localStorage.removeItem("token");
       }
     },
-    async register(user) {
-      await axios.post(
-        "https://cmcwebdevelopment.com/tender-api/api/auth/register",
-        user
-      );
+    async register({ commit }, user) {
+      try {
+        const response = await axios.post(
+          "https://cmcwebdevelopment.com/tender-api/api/auth/register",
+          user
+        );
+        const token = response.data.token;
+        localStorage.setItem("token", token);
+        axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+        commit("auth_success", token);
+      } catch (error) {
+        commit("auth_error");
+        localStorage.removeItem("token");
+      }
     },
     logout({ commit }) {
       commit("logout");
@@ -118,8 +127,11 @@ export default createStore({
       const response = await axios.get(
         "https://cmcwebdevelopment.com/tender-api/api/friends/list"
       );
-      console.log(response.data.friendsList.friends);
-      commit("setFriendsList", response.data.friendsList.friends);
+      if (response.data.friendsList) {
+        commit("setFriendsList", response.data.friendsList.friends);
+      } else {
+        commit("setFriendsList", []);
+      }
     },
     async checkToken({ commit }) {
       try {

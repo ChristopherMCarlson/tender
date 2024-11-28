@@ -1,5 +1,5 @@
 <template>
-    <v-app id="tenderDesktop">
+    <v-app id="tenderDesktop" class="gradient-background">
         <v-main>
             <v-container class="py-8 px-6" fluid>
                 <v-row class="justify-center">
@@ -11,7 +11,8 @@
                                 </v-fab-transition>
                                 <v-card height="75vh" width="25vw" id="recipe-card" margin="auto" @mousedown="startDrag"
                                     @mousemove="onDrag" @mouseup="endDrag" @touchstart="startDrag" @touchmove="onDrag"
-                                    @touchend="endDrag" :style="{ left: cardLeft + 'px' }" class="overflow-auto">
+                                    @touchend="endDrag" :style="{ left: cardLeft + 'px' }" class="overflow-auto"
+                                    color="grey">
                                     <transition name="flip" mode="out-in">
                                         <div :key="showDirections" style="height: 100%;">
                                             <v-img v-if="!showDirections && recipeImage" :src="recipeImage"
@@ -52,14 +53,14 @@
                                 <v-row>
                                     <v-spacer></v-spacer>
                                     <v-col cols="3" class="text-center">
-                                        <v-btn icon="mdi-close" color="red" @click="addToDislikedRecipes()"></v-btn>
+                                        <v-btn icon="mdi-close" color="error" @click="addToDislikedRecipes()"></v-btn>
                                     </v-col>
                                     <v-col cols="3" class="text-center">
-                                        <v-btn icon="mdi-arrow-up" color="blue"
+                                        <v-btn icon="mdi-arrow-up" color="info"
                                             @click="showDirections = !showDirections"></v-btn>
                                     </v-col>
                                     <v-col cols="3" class="text-center">
-                                        <v-btn icon="mdi-check" color="green" @click="addToLikedRecipes()"></v-btn>
+                                        <v-btn icon="mdi-check" color="success" @click="addToLikedRecipes()"></v-btn>
                                     </v-col>
                                     <v-spacer></v-spacer>
                                 </v-row>

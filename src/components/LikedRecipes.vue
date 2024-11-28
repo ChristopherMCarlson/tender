@@ -1,5 +1,5 @@
 <template>
-    <v-container>
+    <v-container class="gradient-background">
         <v-row>
             <v-col cols="12" md="3" v-for="recipe in likedRecipes" :key="recipe.imageId">
                 <v-card height="40vh">

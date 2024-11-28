@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app class="gradient-background">
     <v-main>
       <router-view />
     </v-main>
@@ -15,3 +15,11 @@ export default {
   }),
 }
 </script>
+
+<style>
+.gradient-background {
+  background: linear-gradient(to bottom right, #B0BEC5, #1c2529);
+  min-height: 100vh;
+  /* Ensure it covers the full height */
+}
+</style>
