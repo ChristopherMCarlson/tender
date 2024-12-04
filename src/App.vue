@@ -2,6 +2,14 @@
   <v-app class="gradient-background">
     <v-main>
       <router-view />
+      <v-snackbar v-model="error">
+        An unexpected error occurred. Please try again.
+        <template v-slot:actions>
+          <v-btn color="pink" variant="text" @click="clearError">
+            Close
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-main>
   </v-app>
 </template>
@@ -13,6 +21,17 @@ export default {
   name: 'App',
   data: () => ({
   }),
+  methods: {
+    clearError() {
+      this.$store.dispatch('clearError');
+    },
+  },
+  computed: {
+    error() {
+      return this.$store.state.error;
+    },
+  },
+
 }
 </script>
 
